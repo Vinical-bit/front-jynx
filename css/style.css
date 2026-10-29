@@ -1,0 +1,911 @@
+/* =========================================================
+   jynx/usuarios — estilo compartilhado pelas 3 páginas
+   Ideia: cada tela é uma requisição. O "ticket" azul mostra
+   exatamente o que o formulário manda para o back-end.
+   ========================================================= */
+
+:root {
+  --papel: #F1F2F8;
+  --branco: #FFFFFF;
+  --tinta: #15173D;
+  --tinta-suave: #5A5E85;
+  --nevoa: #D9DCEC;
+  --nevoa-clara: #F6F7FC;
+
+  --cobalto: #3A2BEF;
+  --cobalto-escuro: #2617C4;
+  --cobalto-claro: #DCD8FF;
+
+  /* cores dos verbos HTTP */
+  --get: #0B8A5E;
+  --post: var(--cobalto);
+  --put: #A86F00;
+  --delete: #D2343A;
+
+  --raio: 12px;
+  --fonte: "Archivo", system-ui, sans-serif;
+  --mono: "Martian Mono", ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fonte);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+a {
+  color: var(--cobalto);
+  text-underline-offset: 3px;
+}
+
+code,
+pre {
+  font-family: var(--mono);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cobalto);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- topo ---------- */
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--tinta);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.marca__ponto {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--cobalto);
+  box-shadow: 5px 5px 0 var(--tinta);
+}
+
+.marca__rota {
+  color: var(--tinta-suave);
+  font-weight: 400;
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: var(--tinta-suave);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  color: var(--tinta);
+  background: var(--branco);
+}
+
+.nav a[aria-current="page"] {
+  color: var(--branco);
+  background: var(--tinta);
+}
+
+/* ---------- verbos e rotas (os "carimbos") ---------- */
+
+.rota {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--tinta-suave);
+}
+
+.verbo {
+  display: inline-block;
+  padding: 3px 7px 2px;
+  border-radius: 6px;
+  color: var(--branco);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.verbo--get { background: var(--get); }
+.verbo--post { background: var(--post); }
+.verbo--put { background: var(--put); }
+.verbo--delete { background: var(--delete); }
+
+/* ---------- formulários ---------- */
+
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.campo {
+  display: grid;
+  gap: 6px;
+}
+
+.campo label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* a chave JSON que o campo vira no body */
+.campo label code {
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: var(--tinta-suave);
+}
+
+.campo input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  border: 1.5px solid var(--nevoa);
+  border-radius: var(--raio);
+  background: var(--branco);
+  color: var(--tinta);
+  font: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.campo input::placeholder {
+  color: #9A9DBA;
+}
+
+.campo input:hover {
+  border-color: #B9BDD8;
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: var(--cobalto);
+  box-shadow: 0 0 0 4px rgba(58, 43, 239, 0.15);
+}
+
+.campo input:read-only {
+  background: var(--nevoa-clara);
+}
+
+.form__linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* ---------- botões ---------- */
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--raio);
+  background: var(--cobalto);
+  color: var(--branco);
+  font-family: var(--fonte);
+  font-size: 1rem;
+  font-weight: 700;
+  font-stretch: 112%;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.botao:hover {
+  background: var(--cobalto-escuro);
+  box-shadow: 0 6px 18px -8px rgba(58, 43, 239, 0.7);
+}
+
+.botao:active {
+  transform: translateY(1px);
+}
+
+.botao--pequeno {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 9px;
+  font-size: 0.85rem;
+}
+
+.botao--contorno {
+  background: transparent;
+  color: var(--tinta);
+  box-shadow: inset 0 0 0 1.5px var(--nevoa);
+}
+
+.botao--contorno:hover {
+  background: var(--branco);
+  box-shadow: inset 0 0 0 1.5px var(--tinta);
+}
+
+.botao--perigo {
+  background: transparent;
+  color: var(--delete);
+  box-shadow: inset 0 0 0 1.5px #F2C6C8;
+}
+
+.botao--perigo:hover {
+  background: var(--delete);
+  color: var(--branco);
+  box-shadow: none;
+}
+
+/* ---------- mensagens (preencha via JS) ----------
+   <p id="mensagem" class="mensagem mensagem--sucesso">...</p>
+   <p id="mensagem" class="mensagem mensagem--erro">...</p>
+   Vazia = escondida. */
+
+.mensagem {
+  padding: 14px 16px;
+  border-radius: var(--raio);
+  border-left: 4px solid var(--tinta-suave);
+  background: var(--branco);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.mensagem:empty {
+  display: none;
+}
+
+.mensagem--sucesso {
+  border-color: var(--get);
+  background: #E3F5EE;
+  color: #075C3F;
+}
+
+.mensagem--erro {
+  border-color: var(--delete);
+  background: #FBE7E8;
+  color: #8E1E23;
+}
+
+/* =========================================================
+   Páginas de entrada e cadastro
+   ========================================================= */
+
+.auth {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 48px;
+  max-width: 1280px;
+  min-height: calc(100vh - 84px);
+  margin: 0 auto;
+  padding: 16px 24px 48px;
+}
+
+.auth__form {
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth__titulo {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  font-stretch: 125%;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.auth__sub {
+  margin: 14px 0 32px;
+  color: var(--tinta-suave);
+}
+
+.auth__form .botao {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.auth__troca {
+  margin-top: 24px;
+  color: var(--tinta-suave);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.auth__troca a {
+  font-weight: 600;
+}
+
+/* ---------- o ticket da requisição ---------- */
+
+.ticket {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 40px;
+  border-radius: 28px;
+  background: var(--cobalto);
+  color: var(--branco);
+  animation: chegar 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.ticket__rotulo {
+  margin-bottom: 10px;
+  color: var(--cobalto-claro);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ticket__metodo {
+  font-size: clamp(5rem, 12vw, 10rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  margin-left: -0.04em;
+}
+
+.ticket__rota {
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.ticket__base {
+  color: var(--cobalto-claro);
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+/* linha picotada com os dois "furos" do ticket */
+.ticket__picote {
+  position: relative;
+  margin: 32px -40px;
+  border-top: 2px dashed rgba(255, 255, 255, 0.35);
+}
+
+.ticket__picote::before,
+.ticket__picote::after {
+  content: "";
+  position: absolute;
+  top: -16px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--papel);
+}
+
+.ticket__picote::before { left: -15px; }
+.ticket__picote::after { right: -15px; }
+
+.ticket__codigo {
+  margin: 0;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: rgba(10, 6, 80, 0.32);
+  color: var(--branco);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+.ticket__codigo .chave { color: #FFD66B; }
+.ticket__codigo .tipo { color: var(--cobalto-claro); opacity: 0.8; }
+
+.ticket__respostas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ticket__respostas li {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.ticket__respostas li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.ticket__forma {
+  justify-self: start;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--cobalto-claro);
+  font-size: 0.65rem;
+}
+
+.ticket__secao + .ticket__secao {
+  margin-top: 28px;
+}
+
+/* =========================================================
+   Página de usuários
+   ========================================================= */
+
+.painel {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px 64px;
+}
+
+.painel__cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--tinta);
+}
+
+.painel__titulo {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: clamp(3.25rem, 8vw, 6rem);
+  font-weight: 900;
+  font-stretch: 125%;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+}
+
+.painel__total {
+  margin-top: 0.3em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--cobalto);
+  color: var(--branco);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-stretch: 100%;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.painel__sub {
+  margin-top: 14px;
+  color: var(--tinta-suave);
+}
+
+.painel__sub strong {
+  color: var(--tinta);
+}
+
+.painel__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.painel__grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 32px;
+  align-items: start;
+  margin-top: 32px;
+}
+
+.cartao {
+  padding: 24px;
+  border: 1px solid var(--nevoa);
+  border-radius: 20px;
+  background: var(--branco);
+}
+
+.cartao + .cartao {
+  margin-top: 20px;
+}
+
+.cartao__cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 20px;
+}
+
+.cartao__titulo {
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-stretch: 115%;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- busca por id ---------- */
+
+.busca {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.resultado {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: var(--raio);
+  background: var(--nevoa-clara);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+
+.resultado:empty {
+  display: none;
+}
+
+/* ---------- tabela ---------- */
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela th {
+  padding: 0 12px 12px;
+  border-bottom: 1px solid var(--nevoa);
+  color: var(--tinta-suave);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.tabela td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--nevoa);
+  vertical-align: middle;
+}
+
+.tabela tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabela tbody tr:hover td {
+  background: var(--nevoa-clara);
+}
+
+.tabela .col-id {
+  width: 1%;
+  color: var(--cobalto);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tabela .col-nome {
+  font-weight: 600;
+}
+
+.tabela .col-email,
+.tabela .col-telefone {
+  color: var(--tinta-suave);
+  font-size: 0.92rem;
+}
+
+.tabela .col-acoes {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* lista vazia: aparece sozinho quando o <tbody> fica vazio */
+.vazio {
+  display: none;
+  padding: 40px 16px;
+  color: var(--tinta-suave);
+  text-align: center;
+}
+
+.lista:has(tbody:empty) .tabela {
+  display: none;
+}
+
+.lista:has(tbody:empty) .vazio {
+  display: block;
+}
+
+/* ---------- painel lateral de edição ---------- */
+
+.lateral {
+  position: sticky;
+  top: 24px;
+}
+
+.lateral .form {
+  gap: 14px;
+}
+
+.lateral__botoes {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+/* =========================================================
+   Movimento
+   ========================================================= */
+
+@keyframes chegar {
+  from {
+    opacity: 0;
+    transform: translateY(24px) rotate(-1.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   Responsivo
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .painel__grade {
+    grid-template-columns: 1fr;
+  }
+
+  .lateral {
+    position: static;
+  }
+}
+
+@media (max-width: 860px) {
+  .auth {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    min-height: 0;
+  }
+
+  .auth__form {
+    padding-top: 24px;
+  }
+
+  .ticket {
+    padding: 32px 24px;
+  }
+
+  .ticket__picote {
+    margin: 28px -24px;
+  }
+}
+
+@media (max-width: 720px) {
+  .topo,
+  .auth,
+  .painel {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .topo {
+    flex-wrap: wrap;
+  }
+
+  .form__linha {
+    grid-template-columns: 1fr;
+  }
+
+  .cartao {
+    padding: 18px;
+  }
+
+  /* a tabela vira uma pilha de cartões */
+  .tabela thead {
+    display: none;
+  }
+
+  .tabela tr {
+    display: grid;
+    gap: 4px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--nevoa);
+  }
+
+  .tabela tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .tabela td {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 8px;
+    padding: 2px 0;
+    border: 0;
+  }
+
+  .tabela td::before {
+    content: attr(data-rotulo);
+    color: var(--tinta-suave);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-top: 3px;
+  }
+
+  .tabela .col-id,
+  .tabela .col-acoes {
+    width: auto;
+  }
+
+  .tabela .col-acoes {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .tabela .col-acoes::before {
+    content: none;
+  }
+
+  .tabela .col-acoes .acoes {
+    justify-content: flex-start;
+  }
+
+  .tabela tbody tr:hover td {
+    background: none;
+  }
+
+  .busca {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   Acréscimos do JS
+   Estados que só existem quando o JavaScript está rodando.
+   ========================================================= */
+
+/* Carregando ou com erro, o tbody também fica vazio: sem isto apareceria
+   "Nenhum usuário por aqui", o que seria mentira (a lista só não chegou). */
+.lista[aria-busy="true"]:has(tbody:empty) .vazio,
+.lista:has(.mensagem--erro):has(tbody:empty) .vazio {
+  display: none;
+}
+
+/* Ao atualizar, as linhas antigas ficam apagadas até as novas chegarem. */
+.lista[aria-busy="true"] .tabela {
+  opacity: 0.5;
+}
+
+/* Campo com problema: o JS marca aria-invalid="true" (o leitor de tela
+   também lê esse atributo). */
+.campo input[aria-invalid="true"] {
+  border-color: var(--delete);
+}
+
+/* Botão ocupado durante a requisição: visivelmente "parado". */
+.botao:disabled,
+.botao:disabled:hover {
+  cursor: progress;
+  opacity: 0.65;
+  transform: none;
+  box-shadow: none;
+}
+
+.botao--contorno:disabled:hover {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--nevoa);
+}
+
+/* Excluir em duas etapas: o botão fica vermelho cheio enquanto espera
+   o segundo clique de confirmação. */
+.botao-excluir[data-confirmando] {
+  background: var(--delete);
+  color: var(--branco);
+  box-shadow: none;
+}
+
+/* O resultado da busca usa as mesmas cores de erro das mensagens. */
+.resultado.mensagem--erro {
+  background: #FBE7E8;
+  color: #8E1E23;
+}
+
+/* E-mails longos quebram a linha em vez de criar rolagem horizontal. */
+.tabela td,
+.resultado {
+  overflow-wrap: anywhere;
+}
+
+/* Celular: alvos de toque com pelo menos 44px de altura. */
+@media (max-width: 720px) {
+  .botao--pequeno {
+    height: 44px;
+  }
+
+  .nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
