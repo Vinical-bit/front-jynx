@@ -1,5 +1,5 @@
 // =========================================================
-// api.js — o que as 3 páginas compartilham
+// api.js — a "caixa de ferramentas" que as páginas compartilham
 // =========================================================
 //
 // MAPA DO ARQUIVO
@@ -11,14 +11,19 @@
 //   limparMensagem() ... apaga o aviso
 //   ocuparBotao() / liberarBotao() ... "Salvando…" durante a requisição
 //   marcarInvalido() / limparInvalidos() ... destaque do campo com problema
-//   emailValido(), lerId() ... validações pequenas usadas antes de enviar
-//   salvarNomeLogado(), lerNomeLogado() ... o único dado guardado no localStorage
+//   emailValido(), telefoneValido(), lerId() ... validações usadas antes de enviar
+//   salvarNomeLogado(), lerNomeLogado(), apagarNomeLogado() ... o único dado do localStorage
 //
 // ORDEM
 //   Este arquivo é carregado ANTES do script de cada página (<script src> no HTML),
-//   então tudo aqui já existe quando login.js, cadastro.js ou usuarios.js rodam.
-//   Ao carregar, ele só faz duas coisas: confere se a URL é segura e escreve o
-//   endereço real do back no "ticket" azul das páginas.
+//   então tudo aqui já existe quando acesso.js, login.js, cadastro.js ou painel.js rodam.
+//   Ao carregar, ele só confere se a URL da API é segura.
+//
+// POR QUE ESTE ARQUIVO NÃO ESTÁ NUMA IIFE (e os outros estão)
+//   Scripts comuns (sem type="module") dividem o mesmo escopo global. Aqui isso
+//   é de propósito: estas funções são as ferramentas "públicas" que os outros
+//   arquivos usam. Por isso os outros arquivos ficam fechados em IIFEs e NUNCA
+//   devem declarar no topo um nome que já exista aqui.
 //
 // ---------------------------------------------------------
 // CONTRATO DA API (exemplos reais, tirados do código do back)
@@ -65,18 +70,16 @@ const AVISO_SERVIDOR_ACORDANDO = "O servidor está acordando, pode levar até 1 
 
 const CHAVE_NOME_LOGADO = "jynx:nomeLogado";
 
+// Na tela de acesso, cadastro.js AVISA que uma conta foi criada (um evento) e
+// acesso.js/login.js REAGEM. Assim nenhum arquivo mexe nas variáveis do outro.
+const EVENTO_CONTA_CRIADA = "jynx:conta-criada";
+
 // Se o site está publicado (não é localhost) e a API não usa https, os dados
 // (inclusive senhas) viajam sem criptografia. O front não consegue impedir
 // isso, mas pode avisar bem alto no console de quem está desenvolvendo.
 if (!API_URL.startsWith("https://") && !["localhost", "127.0.0.1"].includes(location.hostname)) {
   console.warn(`[jynx] ATENÇÃO: API_URL (${API_URL}) não usa https. Senhas e dados vão trafegar sem criptografia.`);
 }
-
-// O HTML mostra "localhost:3000" no ticket azul. Trocamos pelo endereço real
-// para a URL ficar escrita em um lugar só (aqui) e o ticket nunca mentir.
-document.querySelectorAll(".ticket__base").forEach((elemento) => {
-  elemento.textContent = new URL(API_URL).host;
-});
 
 // ---------- requisições ----------
 
@@ -214,6 +217,19 @@ function emailValido(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+// Aceita o telefone do jeito que a pessoa escreve ("(81) 99999-0000"), mas
+// exige de 8 a 15 dígitos e só os símbolos comuns de telefone. O texto vai
+// para o banco como foi digitado; só conferimos se parece um telefone.
+function telefoneValido(telefone) {
+  const digitos = telefone.replace(/\D/g, "");
+  return /^[\d\s()+.-]+$/.test(telefone) && digitos.length >= 8 && digitos.length <= 15;
+}
+
+// O back aceita qualquer senha, até de 1 letra. Para contas novas (e senhas
+// trocadas) pedimos um mínimo. No login NÃO conferimos isso: contas antigas
+// podem ter senhas menores e precisam continuar entrando.
+const SENHA_MINIMA = 6;
+
 // Converte o texto do campo em um id inteiro positivo, ou null.
 // O id vai para dentro da URL (/user/7), então só aceitamos dígitos:
 // "7abc", "-1", "1.5" ou "../users" nunca chegam ao servidor.
@@ -225,16 +241,30 @@ function lerId(texto) {
 }
 
 // ---------- quem está logado ----------
+//
+// IMPORTANTE: a API não emite token nem sessão. "Estar logado" aqui é só ter
+// um nome guardado no navegador. Isso serve para CONVENIÊNCIA (mostrar
+// "Olá, Ana" e pular a tela de acesso), NÃO é segurança: qualquer pessoa pode
+// escrever um nome no localStorage pelo DevTools, e as rotas da API são abertas.
 
 // Guardamos SÓ o nome, para exibir. Nada de senha, id ou e-mail: qualquer
 // script da página (ou extensão do navegador) consegue ler o localStorage.
 // O try/catch existe porque o localStorage pode estar bloqueado (aba anônima,
-// configurações de privacidade) e isso não pode quebrar o login.
+// configurações de privacidade). Devolve true/false para o login saber se deu.
 function salvarNomeLogado(nome) {
   try {
     localStorage.setItem(CHAVE_NOME_LOGADO, String(nome).trim().slice(0, 80));
+    return true;
   } catch {
-    // sem localStorage a página continua funcionando, só mostra "visitante"
+    return false;
+  }
+}
+
+function apagarNomeLogado() {
+  try {
+    localStorage.removeItem(CHAVE_NOME_LOGADO);
+  } catch {
+    // localStorage indisponível: não há o que apagar
   }
 }
 

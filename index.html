@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entrar · jynx/usuarios</title>
+  <title>Acesso · jynx funcionários</title>
+  <meta name="description" content="Sistema de cadastro de funcionários: entre ou crie sua conta.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -14,79 +15,93 @@
   <header class="topo">
     <a class="marca" href="index.html">
       <span class="marca__ponto" aria-hidden="true"></span>
-      <span>jynx<span class="marca__rota">/usuarios</span></span>
+      <span>jynx<span class="marca__rota"> funcionários</span></span>
     </a>
-    <nav class="nav" aria-label="Páginas">
-      <a href="index.html" aria-current="page">Entrar</a>
-      <a href="cadastro.html">Criar conta</a>
-      <a href="usuarios.html">Usuários</a>
-    </nav>
   </header>
 
   <main class="auth">
 
-    <section class="auth__form">
-      <h1 class="auth__titulo">Entrar</h1>
-      <p class="auth__sub">Use o e-mail e a senha que você cadastrou.</p>
+    <section class="auth__form" aria-labelledby="titulo-acesso">
+      <h1 id="titulo-acesso" class="auth__titulo">Cadastro de funcionários</h1>
+      <p class="auth__sub">Entre para ver e organizar a sua equipe.</p>
 
-      <form id="form-login" class="form" method="post">
-        <div class="campo">
-          <label for="email">E-mail <code>email</code></label>
-          <input id="email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" required>
-        </div>
+      <!-- Abas: o JS (acesso.js) troca aria-selected, tabindex e hidden.
+           Sem JS, as duas abas ficariam escondidas, mas nada aqui funciona
+           sem JS mesmo (os formulários dependem do fetch). -->
+      <div class="abas" role="tablist" aria-label="Acesso">
+        <button id="aba-entrar" class="aba" type="button" role="tab"
+                aria-selected="true" aria-controls="painel-entrar">Entrar</button>
+        <button id="aba-criar-conta" class="aba" type="button" role="tab"
+                aria-selected="false" aria-controls="painel-criar-conta" tabindex="-1">Criar conta</button>
+      </div>
 
-        <div class="campo">
-          <label for="senha">Senha <code>senha</code></label>
-          <input id="senha" name="senha" type="password" placeholder="Sua senha" autocomplete="current-password" required>
-        </div>
+      <!-- ===== Entrar ===== -->
+      <div id="painel-entrar" class="aba__painel" role="tabpanel" aria-labelledby="aba-entrar">
+        <form id="form-login" class="form" method="post">
+          <div class="campo">
+            <label for="login-email">E-mail</label>
+            <input id="login-email" name="email" type="email" inputmode="email" placeholder="voce@email.com"
+                   autocomplete="username" maxlength="254" required>
+          </div>
 
-        <!-- O JS escreve a resposta do servidor aqui.
-             Adicione a classe mensagem--sucesso ou mensagem--erro. -->
-        <p id="mensagem" class="mensagem" role="status"></p>
+          <div class="campo">
+            <label for="login-senha">Senha</label>
+            <input id="login-senha" name="senha" type="password" placeholder="Sua senha"
+                   autocomplete="current-password" required>
+          </div>
 
-        <button id="botao-entrar" class="botao" type="submit">Entrar</button>
-      </form>
+          <p id="login-mensagem" class="mensagem" role="status"></p>
 
-      <p class="auth__troca">Ainda não tem conta? <a href="cadastro.html">Criar conta</a></p>
+          <button id="botao-entrar" class="botao" type="submit">Entrar</button>
+        </form>
+
+        <p class="auth__troca">Ainda não tem conta? <a href="#criar-conta">Criar conta</a></p>
+      </div>
+
+      <!-- ===== Criar conta ===== -->
+      <div id="painel-criar-conta" class="aba__painel" role="tabpanel" aria-labelledby="aba-criar-conta" hidden>
+        <form id="form-cadastro" class="form" method="post">
+          <div class="campo">
+            <label for="cadastro-nome">Nome</label>
+            <input id="cadastro-nome" name="nome" type="text" placeholder="Seu nome"
+                   autocomplete="name" maxlength="80" required>
+          </div>
+
+          <div class="campo">
+            <label for="cadastro-telefone">Telefone</label>
+            <input id="cadastro-telefone" name="telefone" type="tel" inputmode="tel" placeholder="(81) 99999-0000"
+                   autocomplete="tel" maxlength="20" required>
+          </div>
+
+          <div class="campo">
+            <label for="cadastro-email">E-mail</label>
+            <input id="cadastro-email" name="email" type="email" inputmode="email" placeholder="voce@email.com"
+                   autocomplete="email" maxlength="254" required>
+          </div>
+
+          <div class="campo">
+            <label for="cadastro-senha">Senha</label>
+            <input id="cadastro-senha" name="senha" type="password" placeholder="Crie uma senha"
+                   autocomplete="new-password" aria-describedby="cadastro-senha-ajuda" required>
+            <p id="cadastro-senha-ajuda" class="campo__ajuda">Use pelo menos 6 caracteres. Ela é guardada criptografada.</p>
+          </div>
+
+          <p id="cadastro-mensagem" class="mensagem" role="status"></p>
+
+          <button id="botao-cadastrar" class="botao" type="submit">Criar conta</button>
+        </form>
+
+        <p class="auth__troca">Já tem conta? <a href="#entrar">Entrar</a></p>
+      </div>
     </section>
-
-    <aside class="ticket" aria-label="O que este formulário envia ao servidor">
-      <p class="ticket__rotulo">Este formulário envia</p>
-      <p class="ticket__metodo">POST</p>
-      <p class="ticket__rota"><span class="ticket__base">localhost:3000</span>/login</p>
-
-      <div class="ticket__picote" aria-hidden="true"></div>
-
-      <div class="ticket__secao">
-        <p class="ticket__rotulo">Corpo · JSON</p>
-<pre class="ticket__codigo">{
-  <span class="chave">"email"</span>: <span class="tipo">string</span>,
-  <span class="chave">"senha"</span>: <span class="tipo">string</span>
-}</pre>
-      </div>
-
-      <div class="ticket__secao">
-        <p class="ticket__rotulo">O servidor responde</p>
-        <ul class="ticket__respostas">
-          <li>
-            <span class="ticket__forma">objeto</span>
-            <span>{ menssagem: "Logado com sucesso", nome, telefone, email, id }</span>
-          </li>
-          <li>
-            <span class="ticket__forma">texto</span>
-            <span>"Não encontrado"</span>
-          </li>
-          <li>
-            <span class="ticket__forma">texto</span>
-            <span>"usuario ou senha incorreta"</span>
-          </li>
-        </ul>
-      </div>
-    </aside>
 
   </main>
 
+  <!-- A ordem importa: api.js primeiro (ferramentas), depois acesso.js
+       (abas), depois os dois formulários. Ver o topo de cada arquivo. -->
   <script src="js/api.js"></script>
+  <script src="js/acesso.js"></script>
   <script src="js/login.js"></script>
+  <script src="js/cadastro.js"></script>
 </body>
 </html>

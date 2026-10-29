@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funcionários · jynx funcionários</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<!-- hidden: a página começa escondida e o painel.js só a mostra depois de
+     confirmar que alguém entrou. Sem isso, quem não entrou veria o painel
+     "piscar" antes de ser mandado para a tela de acesso. Conveniência, não
+     segurança: ver o topo de painel.js. -->
+<body hidden>
+
+  <header class="topo">
+    <a class="marca" href="painel.html">
+      <span class="marca__ponto" aria-hidden="true"></span>
+      <span>jynx<span class="marca__rota"> funcionários</span></span>
+    </a>
+
+    <div class="sessao">
+      <!-- O JS escreve o nome com textContent (ver painel.js) -->
+      <p class="sessao__ola">Olá, <strong id="nome-logado"></strong></p>
+      <button id="botao-sair" class="botao botao--contorno botao--pequeno" type="button">Sair</button>
+    </div>
+  </header>
+
+  <main class="painel">
+
+    <div class="painel__cabeca">
+      <div>
+        <h1 class="painel__titulo">
+          Funcionários
+          <!-- O JS coloca aqui quantos funcionários vieram -->
+          <span class="painel__total"><span id="total-funcionarios">…</span><span class="sr-only"> cadastrados</span></span>
+        </h1>
+        <p class="painel__sub">Cadastre, encontre e atualize os dados da sua equipe.</p>
+      </div>
+
+      <div class="painel__acoes">
+        <button id="botao-atualizar" class="botao botao--contorno botao--pequeno" type="button">Atualizar lista</button>
+        <button id="botao-novo" class="botao botao--pequeno" type="button" aria-controls="cartao-form">Novo funcionário</button>
+      </div>
+    </div>
+
+    <div class="painel__grade">
+
+      <!-- Lista de funcionários, com a busca no topo -->
+      <section class="cartao lista" aria-labelledby="titulo-lista">
+        <div class="cartao__cabeca">
+          <h2 id="titulo-lista" class="cartao__titulo">Lista de funcionários</h2>
+        </div>
+
+        <div class="busca" role="search">
+          <div class="campo">
+            <label for="busca-funcionario">Buscar funcionário</label>
+            <input id="busca-funcionario" type="search" placeholder="Nome, telefone ou e-mail"
+                   autocomplete="off" spellcheck="false" aria-describedby="resumo-busca">
+          </div>
+          <!-- O JS escreve "Mostrando 2 de 5" ou "Nenhum funcionário encontrado" -->
+          <p id="resumo-busca" class="busca__resumo" role="status"></p>
+        </div>
+
+        <!-- Carregando, erro ao carregar, confirmação e resultado da exclusão -->
+        <p id="mensagem-lista" class="mensagem" role="status"></p>
+
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col">Telefone</th>
+              <th scope="col">E-mail</th>
+              <th scope="col"><span class="sr-only">Ações</span></th>
+            </tr>
+          </thead>
+
+          <!-- O JS limpa este tbody e cria uma linha por funcionário,
+               usando o <template id="modelo-linha"> lá embaixo. -->
+          <tbody id="lista-funcionarios"></tbody>
+        </table>
+
+        <!-- Aparece sozinho (via CSS) quando o tbody estiver vazio -->
+        <div class="vazio">
+          <p>Nenhum funcionário cadastrado ainda.</p>
+          <button id="botao-primeiro" class="botao botao--pequeno" type="button" aria-controls="cartao-form">Cadastrar o primeiro</button>
+        </div>
+      </section>
+
+      <!-- Um formulário, dois modos: "Novo funcionário" e "Editar funcionário" -->
+      <aside class="lateral">
+        <section id="cartao-form" class="cartao" aria-labelledby="titulo-form">
+          <div class="cartao__cabeca">
+            <!-- tabindex="-1": o JS pode levar o foco até o título (ver painel.js) -->
+            <h2 id="titulo-form" class="cartao__titulo" tabindex="-1">Novo funcionário</h2>
+          </div>
+
+          <form id="form-funcionario" class="form" method="post">
+            <div class="campo">
+              <label for="campo-nome">Nome</label>
+              <!-- autocomplete="off": estes dados são de OUTRA pessoa. Sem isto o
+                   navegador poderia preencher com os dados de quem está usando. -->
+              <input id="campo-nome" name="nome" type="text" autocomplete="off" maxlength="80" required>
+            </div>
+
+            <div class="campo">
+              <label for="campo-telefone">Telefone</label>
+              <input id="campo-telefone" name="telefone" type="tel" inputmode="tel" placeholder="(81) 99999-0000"
+                     autocomplete="off" maxlength="20" required>
+            </div>
+
+            <div class="campo">
+              <label for="campo-email">E-mail</label>
+              <input id="campo-email" name="email" type="email" inputmode="email" placeholder="nome@empresa.com"
+                     autocomplete="off" maxlength="254" required>
+            </div>
+
+            <div class="campo">
+              <label id="rotulo-senha" for="campo-senha">Senha de acesso</label>
+              <!-- new-password: impede o navegador de colar a SUA senha aqui -->
+              <input id="campo-senha" name="senha" type="password" autocomplete="new-password"
+                     aria-describedby="ajuda-senha" required>
+              <!-- O JS troca este texto conforme o modo (criar ou editar) -->
+              <p id="ajuda-senha" class="campo__ajuda">O funcionário vai usar este e-mail e esta senha para entrar no sistema.</p>
+            </div>
+
+            <p id="mensagem-form" class="mensagem" role="status"></p>
+
+            <div class="lateral__botoes">
+              <button id="botao-salvar" class="botao" type="submit">Cadastrar funcionário</button>
+              <button id="botao-cancelar" class="botao botao--contorno" type="button" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </section>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Modelo de uma linha da tabela. O id do funcionário vai só no data-id
+       (nunca aparece na tela). O JS preenche cada <td> com textContent. -->
+  <template id="modelo-linha">
+    <tr data-id="">
+      <td class="col-nome" data-rotulo="Nome"></td>
+      <td class="col-telefone" data-rotulo="Telefone"></td>
+      <td class="col-email" data-rotulo="E-mail"></td>
+      <td class="col-acoes">
+        <div class="acoes">
+          <button class="botao botao--contorno botao--pequeno botao-editar" type="button">Editar</button>
+          <button class="botao botao--perigo botao--pequeno botao-excluir" type="button">Excluir</button>
+        </div>
+      </td>
+    </tr>
+  </template>
+
+  <script src="js/api.js"></script>
+  <script src="js/painel.js"></script>
+</body>
+</html>

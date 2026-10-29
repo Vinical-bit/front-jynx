@@ -3,94 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Criar conta · jynx/usuarios</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Esta página não existe mais: "Criar conta" agora é uma aba da tela de
+       acesso. Ela só sobrevive para links antigos não caírem num erro 404
+       do GitHub Pages. O meta refresh funciona até sem JavaScript. -->
+  <meta http-equiv="refresh" content="0; url=index.html#criar-conta">
+  <meta name="robots" content="noindex">
+  <title>Criar conta · jynx funcionários</title>
 </head>
 <body>
-
-  <header class="topo">
-    <a class="marca" href="index.html">
-      <span class="marca__ponto" aria-hidden="true"></span>
-      <span>jynx<span class="marca__rota">/usuarios</span></span>
-    </a>
-    <nav class="nav" aria-label="Páginas">
-      <a href="index.html">Entrar</a>
-      <a href="cadastro.html" aria-current="page">Criar conta</a>
-      <a href="usuarios.html">Usuários</a>
-    </nav>
-  </header>
-
-  <main class="auth">
-
-    <section class="auth__form">
-      <h1 class="auth__titulo">Criar conta</h1>
-      <p class="auth__sub">Preencha seus dados. A senha é guardada criptografada.</p>
-
-      <form id="form-cadastro" class="form" method="post">
-        <div class="campo">
-          <label for="name">Nome <code>name</code></label>
-          <input id="name" name="name" type="text" placeholder="Seu nome" autocomplete="name" required>
-        </div>
-
-        <div class="campo">
-          <label for="phone">Telefone <code>phone</code></label>
-          <input id="phone" name="phone" type="tel" placeholder="(81) 99999-0000" autocomplete="tel" required>
-        </div>
-
-        <div class="campo">
-          <label for="email">E-mail <code>email</code></label>
-          <input id="email" name="email" type="email" placeholder="voce@email.com" autocomplete="email" required>
-        </div>
-
-        <div class="campo">
-          <label for="password">Senha <code>password</code></label>
-          <input id="password" name="password" type="password" placeholder="Crie uma senha" autocomplete="new-password" required>
-        </div>
-
-        <!-- O JS escreve a resposta do servidor aqui.
-             Adicione a classe mensagem--sucesso ou mensagem--erro. -->
-        <p id="mensagem" class="mensagem" role="status"></p>
-
-        <button id="botao-cadastrar" class="botao" type="submit">Criar conta</button>
-      </form>
-
-      <p class="auth__troca">Já tem conta? <a href="index.html">Entrar</a></p>
-    </section>
-
-    <aside class="ticket" aria-label="O que este formulário envia ao servidor">
-      <p class="ticket__rotulo">Este formulário envia</p>
-      <p class="ticket__metodo">POST</p>
-      <p class="ticket__rota"><span class="ticket__base">localhost:3000</span>/user</p>
-
-      <div class="ticket__picote" aria-hidden="true"></div>
-
-      <div class="ticket__secao">
-        <p class="ticket__rotulo">Corpo · JSON</p>
-<pre class="ticket__codigo">{
-  <span class="chave">"name"</span>: <span class="tipo">string</span>,
-  <span class="chave">"phone"</span>: <span class="tipo">string</span>,
-  <span class="chave">"email"</span>: <span class="tipo">string</span>,
-  <span class="chave">"password"</span>: <span class="tipo">string</span>
-}</pre>
-      </div>
-
-      <div class="ticket__secao">
-        <p class="ticket__rotulo">O servidor responde</p>
-        <ul class="ticket__respostas">
-          <li>
-            <span class="ticket__forma">texto</span>
-            <span>"O Usuario: {name} foi cadastrado com sucesso!"</span>
-          </li>
-        </ul>
-      </div>
-    </aside>
-
-  </main>
-
-  <script src="js/api.js"></script>
-  <script src="js/cadastro.js"></script>
+  <p>Esta página mudou de lugar. <a href="index.html#criar-conta">Ir para Criar conta</a>.</p>
 </body>
 </html>
